@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine?</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary-pink: #ff85a2;
+            --soft-pink: #fce4ec;
+            --deep-pink: #ff4d6d;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fce4ec 0%, #ffd1dc 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            text-align: center;
+        }
+
+        #main-card {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            max-width: 90%;
+        }
+
+        h1 {
+            color: var(--deep-pink);
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .btn-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            min-height: 200px;
+        }
+
+        #yesBtn {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        #noBtn {
+            background-color: var(--deep-pink);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            position: absolute;
+            transition: 0.2s ease;
+        }
+
+        #success-message {
+            display: none;
+            margin-top: 50px;
+            padding: 40px;
+            animation: fadeIn 1.5s ease-in;
+        }
+
+        .final-text {
+            font-size: 1.8rem;
+            color: var(--deep-pink);
+            line-height: 1.6;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .shy-popup {
+            position: fixed;
+            bottom: 20px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            color: var(--deep-pink);
+            display: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="main-card">
+        <h1 id="question">Will you be my valentine bizo? 💖</h1>
+        
+        <div class="btn-container">
+            <button id="yesBtn">YES! 💍</button>
+            <button id="noBtn">No 🥺</button>
+        </div>
+    </div>
+
+    <div id="success-message">
+        <div class="final-text">
+            Thank you for being here,<br>
+            Without you Arslan is nothing bizo.<br>
+            <strong>Thank you for being my valentine❤️😌</strong><br><br>
+            <span style="font-size: 1.2rem;">It’s Yes Or Yes❤️😭</span>
+        </div>
+    </div>
+
+    <div id="shyPopup" class="shy-popup">No thora shy type hai 🙈</div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const shyPopup = document.getElementById('shyPopup');
+        let yesSize = 20;
+
+        // No button move logic
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('click', moveButton);
+
+        function moveButton() {
+            // Random position
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+
+            // Show shy popup
+            shyPopup.style.display = 'block';
+            setTimeout(() => { shyPopup.style.display = 'none'; }, 2000);
+
+            // Make Yes button bigger
+            yesSize += 15;
+            yesBtn.style.fontSize = yesSize + 'px';
+            yesBtn.style.padding = (yesSize/2) + 'px ' + yesSize + 'px';
+        }
+
+        // Yes button click logic
+        yesBtn.addEventListener('click', () => {
+            document.getElementById('main-card').style.display = 'none';
+            document.getElementById('success-message').style.display = 'block';
+            noBtn.style.display = 'none';
+
+            // Confetti and Decorations
+            var duration = 5 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+                
+                confetti({...defaults, particleCount: 40, origin: { x: Math.random(), y: Math.random() - 0.2 }});
+            }, 250);
+
+            // Scroll down smooth
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
